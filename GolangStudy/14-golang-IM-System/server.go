@@ -103,7 +103,7 @@ func (this *Server) Handler(conn net.Conn) {
 			//当这个case触发后，下面的case中的代码虽然不会执行，但是条件会执行
 			//而对于time.After，只要再次执行，就会重置定时器
 			fmt.Println("Case isLive")
-		case <-time.After(time.Second * 300):
+		case <-time.After(time.Second * 10):
 			//已经超时
 			//将当前user强制关闭
 			user.SendMsg("你被踢了")
