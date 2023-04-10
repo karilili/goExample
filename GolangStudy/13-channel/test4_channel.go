@@ -20,6 +20,7 @@ func fibonacii(c, quit chan int) {
 			//	fmt.Println("not c or quit, just test")
 		}
 	}
+	fmt.Println("fibonacii end1")
 }
 
 func main() {
@@ -36,4 +37,5 @@ func main() {
 
 	//main go
 	fibonacii(c, quit) //channel是引用传递
+	fmt.Println("fibonacii end2")
 }

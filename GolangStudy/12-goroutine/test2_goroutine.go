@@ -7,7 +7,7 @@ import (
 
 func main() {
 
-	// //用goc创建承载一个形参为空，返回值为空的一个函数
+	// //用go创建承载一个形参为空，返回值为空的一个函数
 	// go func() {
 	// 	defer fmt.Println("A.defer")
 	// 	func() {

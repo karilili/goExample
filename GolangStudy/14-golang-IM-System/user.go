@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net"
 	"strings"
 )
@@ -46,7 +47,7 @@ func (this *User) Online() {
 
 // 用户的下线功能
 func (this *User) Offline() {
-	// 用户上线，将用户加入到onlineMap中
+	// 用户下线，将用户从onlineMap中删除
 	this.server.mapLock.Lock()
 	delete(this.server.OnlineMap, this.Name)
 	this.server.mapLock.Unlock()
@@ -95,6 +96,7 @@ func (this *User) DoMessage(msg string) {
 // 监听当前User channel的方法，一旦有消息，就直接发送给对端客户端
 func (this *User) ListenMessage() {
 	for {
+		fmt.Println("User ListenMessage...")
 		msg := <-this.C
 		this.conn.Write([]byte(msg + "\n"))
 	}
