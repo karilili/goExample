@@ -34,7 +34,6 @@ func NewServer(ip string, port int) *Server {
 // 监听Message广播消息channel的goroutine，一旦有消息就发送给全部的在线User
 func (this *Server) ListernMessager() {
 	for {
-		fmt.Println("server ListernMessager...")
 		msg := <-this.Message
 
 		//将msg发送给全部的在线User
@@ -55,7 +54,6 @@ func (this *Server) BroadCast(user *User, msg string) {
 func (this *Server) Handler(conn net.Conn) {
 	//...当前链接的业务
 	// fmt.Println("链接建立成功")
-	defer fmt.Println("Handler end")
 
 	user := NewUser(conn, this)
 
@@ -69,7 +67,6 @@ func (this *Server) Handler(conn net.Conn) {
 	go func() {
 		buf := make([]byte, 4096)
 		for {
-			fmt.Println("server Handle Read Client Msg")
 			n, err := conn.Read(buf)
 			if n == 0 {
 				user.Offline()
@@ -117,7 +114,6 @@ func (this *Server) Handler(conn net.Conn) {
 			fmt.Println("Case time return")
 			return //runtime.Goexit()	或者调用这个函数
 		}
-		fmt.Println("server Handle for ...")
 	}
 }
 
@@ -138,7 +134,6 @@ func (this *Server) Start() {
 	//死循环，不断监听
 	for {
 		//accpet
-		fmt.Println("server accpet...")
 		conn, err := listener.Accept()
 		if err != nil {
 			fmt.Println("Listen accpet err:", err)
@@ -147,5 +142,9 @@ func (this *Server) Start() {
 
 		//do handler
 		go this.Handler(conn)
+
+		//当前例子中，server与user的监听都位于协程中，也可以说是“写”都在子线程中进行
+		//每一个user的“读”和数据处理则在另一个协程中进行
+		//每一个user的超时连接判断也在一个协程中进行
 	}
 }
