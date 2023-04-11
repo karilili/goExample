@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"net"
 )
@@ -10,6 +11,7 @@ type Client struct {
 	ServerPort int
 	Name       string
 	conn       net.Conn
+	flag       int
 }
 
 func NewClient(serverIp string, serverPort int) *Client {
@@ -31,13 +33,47 @@ func NewClient(serverIp string, serverPort int) *Client {
 	return client
 }
 
+func (client *Client) menu() bool {
+	var flag int
+
+	fmt.Println("1. 公聊模式")
+	fmt.Println("2. 私聊模式")
+	fmt.Println("3. 修改用户名")
+	fmt.Println("0. 退出")
+
+	fmt.Scanln(&flag)
+	if flag >= 0 && flag <= 3 {
+		client.flag = flag
+		return true
+	} else {
+		fmt.Println(">>>>>请输入合法范围内的数字<<<<<<")
+		return false
+	}
+}
+
+//解析命令行参数 需要使用到flag包
+
+var serverIp string
+var serverPort int
+
+// ./Client -ip 127.0.0.1 -port 8888
+
+func init() {
+	flag.StringVar(&serverIp, "ip", "127.0.0.1", "设置服务器IP地址(默认是127.0.0.1)")
+	flag.IntVar(&serverPort, "port", 8888, "设置服务器端口(默认是8888)")
+	//第一个形参是命令的提示词，第二个是默认值，第三个是提示信息
+}
+
 func main() {
-	client := NewClient("127.0.0.1", 8888)
+	//命令行解析
+	flag.Parse() //解析这个进程环境变量中是否有提示词
+
+	client := NewClient(serverIp, serverPort)
 	if client == nil {
 		fmt.Println(">>>>>>>>链接服务器失败...")
 	}
 	fmt.Println(">>>>>>>>链接服务器成功...")
 
 	//启动客户端业务
-	select {}
+	client.Run()
 }
