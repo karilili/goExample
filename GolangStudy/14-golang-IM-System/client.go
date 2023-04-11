@@ -19,6 +19,7 @@ func NewClient(serverIp string, serverPort int) *Client {
 	client := &Client{
 		ServerIp:   serverIp,
 		ServerPort: serverPort,
+		flag:       999,
 	}
 
 	//链接server
@@ -48,6 +49,31 @@ func (client *Client) menu() bool {
 	} else {
 		fmt.Println(">>>>>请输入合法范围内的数字<<<<<<")
 		return false
+	}
+}
+
+func (client *Client) Run() {
+	for client.flag != 0 { //如果等于0，则跳出循环。不等于0，则一直循环
+		for client.menu() != true { //如果不为true，就一直循环，执行menu函数，否则退出循环
+		}
+		switch client.flag {
+		case 1:
+			//公聊模式
+			fmt.Println("公聊模式选择...")
+			break
+		case 2:
+			//私聊模式
+			fmt.Println("私聊模式...")
+			break
+		case 3:
+			//修改用户名
+			fmt.Println("修改用户名...")
+			break
+		case 0:
+			//退出
+			fmt.Println("退出...")
+			break
+		}
 	}
 }
 
